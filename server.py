@@ -27,26 +27,9 @@ def db():
 def setup_database():
     connection = db()
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS expenses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            amount REAL NOT NULL,
-            category TEXT NOT NULL,
-            description TEXT,
-            expense_date TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            user_id INTEGER
-        )
-    """)
-
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS settings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER UNIQUE,
-            monthly_budget REAL DEFAULT 0
-        )
-    """)
-
+    # ---------------------------------------------------------
+    # USERS
+    # ---------------------------------------------------------
     connection.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,15 +65,29 @@ def setup_database():
 
     chisomo_id = existing_user["id"]
 
-    # Make sure expenses have user_id.
-    columns = [
+    # ---------------------------------------------------------
+    # EXPENSES
+    # ---------------------------------------------------------
+    connection.execute("""
+        CREATE TABLE IF NOT EXISTS expenses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            amount REAL NOT NULL,
+            category TEXT NOT NULL,
+            description TEXT,
+            expense_date TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            user_id INTEGER
+        )
+    """)
+
+    expense_columns = [
         row["name"]
         for row in connection.execute(
             "PRAGMA table_info(expenses)"
         ).fetchall()
     ]
 
-    if "user_id" not in columns:
+    if "user_id" not in expense_columns:
         connection.execute("""
             ALTER TABLE expenses
             ADD COLUMN user_id INTEGER
@@ -103,12 +100,63 @@ def setup_database():
         WHERE user_id IS NULL
     """, (chisomo_id,))
 
-    # Give Chisomo a settings record.
+    # ---------------------------------------------------------
+    # SETTINGS
+    # ---------------------------------------------------------
     connection.execute("""
-        INSERT OR IGNORE INTO settings
-        (user_id, monthly_budget)
-        VALUES (?, 0)
-    """, (chisomo_id,))
+        CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER UNIQUE,
+            monthly_budget REAL DEFAULT 0
+        )
+    """)
+
+    settings_columns = [
+        row["name"]
+        for row in connection.execute(
+            "PRAGMA table_info(settings)"
+        ).fetchall()
+    ]
+
+    # Upgrade old settings table that has no user_id.
+    if "user_id" not in settings_columns:
+
+        connection.execute("""
+            ALTER TABLE settings
+            ADD COLUMN user_id INTEGER
+        """)
+
+        # Move the old global budget to Chisomo's account.
+        old_setting = connection.execute("""
+            SELECT id, monthly_budget
+            FROM settings
+            ORDER BY id
+            LIMIT 1
+        """).fetchone()
+
+        if old_setting is not None:
+            connection.execute("""
+                UPDATE settings
+                SET user_id = ?
+                WHERE id = ?
+            """, (
+                chisomo_id,
+                old_setting["id"]
+            ))
+
+    # Make sure Chisomo has settings.
+    existing_settings = connection.execute("""
+        SELECT id
+        FROM settings
+        WHERE user_id = ?
+    """, (chisomo_id,)).fetchone()
+
+    if existing_settings is None:
+        connection.execute("""
+            INSERT INTO settings
+            (user_id, monthly_budget)
+            VALUES (?, 0)
+        """, (chisomo_id,))
 
     connection.commit()
     connection.close()
