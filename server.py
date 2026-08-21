@@ -752,9 +752,12 @@ def update_budget():
     })
 
 
-if __name__ == "__main__":
-    setup_database()
+# Initialize the database when the application starts.
+# This is required both for local Python execution and Gunicorn/Render.
+setup_database()
 
+
+if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=5000,
