@@ -315,8 +315,11 @@ def update_budget():
     })
 
 
+# Initialize database when Flask/Gunicorn loads the application.
+setup_database()
+
+
 if __name__ == "__main__":
-    setup_database()
     app.run(
         host="0.0.0.0",
         port=5000,
