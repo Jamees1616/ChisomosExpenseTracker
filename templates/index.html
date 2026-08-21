@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Chisomo's Expense Tracker</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -26,12 +22,300 @@
     --radius: 16px;
 }
 
+/* LOGIN */
+
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0B1B3D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", Arial, sans-serif;
+    overflow: hidden;
+    perspective: 1000px;
+}
+
+.login-bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(
+            rgba(78,205,196,0.03) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(78,205,196,0.03) 1px,
+            transparent 1px
+        );
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+.glow-orb {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .15;
+    pointer-events: none;
+}
+
+.glow-orb.one {
+    background: #4ECDC4;
+    top: -100px;
+    left: -100px;
+}
+
+.glow-orb.two {
+    background: #8B5A2B;
+    bottom: -100px;
+    right: -100px;
+}
+
+.login-card-container {
+    transform-style: preserve-3d;
+    transition: transform .1s ease-out;
+    width: min(400px, calc(100% - 30px));
+}
+
+.login-card {
+    width: 100%;
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    padding: 50px 40px;
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background:
+        linear-gradient(
+            90deg,
+            #8B5A2B,
+            #4ECDC4,
+            #8B5A2B
+        );
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.avatar-ring {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    padding: 3px;
+    background:
+        linear-gradient(
+            135deg,
+            #8B5A2B,
+            #4ECDC4
+        );
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background:
+        linear-gradient(
+            135deg,
+            #1a3a6e,
+            #0B1B3D
+        );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #4ECDC4;
+}
+
+.login-card h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
+    margin: 0 0 8px;
+}
+
+.login-subtitle {
+    color: rgba(255,255,255,.4);
+    text-align: center;
+    font-size: 14px;
+    margin: 0 0 35px;
+}
+
+.login-input-wrap {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 16px 48px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    background: rgba(255,255,255,.03);
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: all .3s;
+}
+
+.login-input:focus {
+    border-color: #4ECDC4;
+    background: rgba(255,255,255,.06);
+    box-shadow:
+        0 0 25px rgba(78,205,196,.1);
+}
+
+.login-input::placeholder {
+    color: rgba(255,255,255,.25);
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    color: rgba(255,255,255,.3);
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 9px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,.4);
+    cursor: pointer;
+}
+
+.password-toggle:hover {
+    color: #4ECDC4;
+    opacity: 1;
+}
+
+.password-strength {
+    height: 3px;
+    background: rgba(255,255,255,.05);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0;
+    border-radius: 2px;
+    transition: all .4s;
+}
+
+.strength-bar.weak {
+    width: 33%;
+    background: #e74c3c;
+}
+
+.strength-bar.medium {
+    width: 66%;
+    background: #f39c12;
+}
+
+.strength-bar.strong {
+    width: 100%;
+    background: #4ECDC4;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            #4ECDC4,
+            #3DBDB5
+        );
+    color: #0B1B3D;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 15px 40px rgba(78,205,196,.3);
+}
+
+.login-btn:disabled {
+    opacity: .6;
+    cursor: wait;
+    transform: none;
+}
+
+.login-error {
+    display: none;
+    margin-top: 15px;
+    padding: 11px;
+    border-radius: 10px;
+    background: rgba(220,38,38,.12);
+    border: 1px solid rgba(220,38,38,.25);
+    color: #ff8d8d;
+    text-align: center;
+    font-size: 13px;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: rgba(255,255,255,.25);
+    font-size: 12px;
+}
+
+/* DASHBOARD */
+
+#appScreen {
+    display: none;
+}
+
 body {
     margin: 0;
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background: var(--background);
     color: #172033;
 }
@@ -49,6 +333,13 @@ header {
     margin: auto;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
 header h1 {
     margin: 0;
     font-size: 25px;
@@ -57,6 +348,26 @@ header h1 {
 header p {
     margin: 6px 0 0;
     color: #cbd5e1;
+}
+
+.user-area {
+    text-align: right;
+}
+
+.user-name {
+    display: block;
+    font-size: 13px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+}
+
+.logout-btn {
+    width: auto;
+    padding: 7px 13px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 8px;
+    font-size: 12px;
 }
 
 nav {
@@ -81,8 +392,7 @@ main {
 
 .dashboard {
     display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
 }
 
@@ -192,8 +502,7 @@ button:hover {
 
 .expense {
     padding: 16px 0;
-    border-bottom:
-        1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .expense:last-child {
@@ -219,7 +528,6 @@ button:hover {
     background: #f1f5f9;
     color: #475569;
     font-size: 12px;
-    font-weight: bold;
 }
 
 .date {
@@ -230,322 +538,666 @@ button:hover {
 .actions {
     display: flex;
     gap: 8px;
-    margin-top: 11px;
+    margin-top: 12px;
 }
 
 .actions button {
     width: auto;
-    padding: 7px 13px;
+    padding: 8px 13px;
     font-size: 12px;
 }
 
-.budget-number {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.budget-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
-}
-
-.budget-box {
-    padding: 14px;
-    background: #f8fafc;
-    border-radius: 12px;
-}
-
-.budget-box small {
-    color: var(--muted);
-}
-
-.progress-track {
-    width: 100%;
-    height: 12px;
-    background: #e2e8f0;
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 12px 0;
-}
-
-#budgetProgress {
-    background: var(--primary) !important;
-    border-radius: 20px;
-}
-
-.category-row {
-    display: grid;
-    grid-template-columns:
-        130px 1fr auto;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom:
-        1px solid var(--border);
-}
-
-.category-bar {
-    height: 8px;
-    background: #e2e8f0;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.category-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 20px;
-}
-
 @media (max-width: 850px) {
-
     .dashboard {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
-
 }
 
 @media (max-width: 600px) {
+    .login-card {
+        padding: 40px 25px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
 
     main {
-        padding: 14px;
+        padding: 15px;
     }
 
     header {
-        padding: 20px 14px;
+        padding: 18px 15px;
+    }
+
+    .header-top {
+        align-items: flex-start;
     }
 
     header h1 {
         font-size: 21px;
     }
 
-    .dashboard {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
+    .user-area {
+        min-width: 85px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-card-container {
+        transition: none;
     }
 
-    .card {
-        padding: 15px;
+    .login-card::before {
+        animation: none;
+    }
+}
+</style>
+
+<style>
+/* =========================
+   HEADER USER ACTIONS
+========================= */
+
+.user-area {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.user-name {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.user-area .logout-btn {
+    margin: 0 !important;
+    min-height: 40px;
+    padding: 9px 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+
+    .user-area {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+        margin-top: 10px;
     }
 
-    .value {
-        font-size: 19px;
+    .user-name {
+        width: 100%;
+        margin-bottom: 2px;
     }
 
-    .budget-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .category-row {
-        grid-template-columns:
-            100px 1fr auto;
-        font-size: 13px;
+    .user-area .logout-btn {
+        flex: 1;
+        min-width: 130px;
     }
 
 }
-
-@media (max-width: 380px) {
-
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
-
-}
-
 </style>
 
 </head>
 
 <body>
 
-<header>
+<div id="loginScreen">
 
-<div class="header-inner">
+    <div class="login-bg-grid"></div>
 
-<h1>Chisomo's Expense Tracker</h1>
+    <div class="glow-orb one"></div>
+    <div class="glow-orb two"></div>
 
-<p>
-Track your spending and manage your budget.
-</p>
+    <div class="login-card-container" id="loginCard">
 
-<nav>
-<span>Dashboard</span>
-<span>Expenses</span>
-<span>Budget</span>
-<span>Analytics</span>
-</nav>
+        <div class="login-card">
+
+            <div class="avatar-ring">
+                <div class="avatar">&#128100;</div>
+            </div>
+
+            <h2>Welcome Back</h2>
+
+            <p class="login-subtitle">
+                Sign in to Chisomo's Expense Tracker
+            </p>
+
+            <div id="authLoginView">
+
+                <form id="loginForm">
+
+                    <div class="login-input-wrap">
+
+                        <span class="input-icon">&#9993;</span>
+
+                        <input
+                            class="login-input"
+                            type="text"
+                            id="loginUsername"
+                            placeholder="Username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="login-input-wrap">
+
+                        <span class="input-icon">&#128274;</span>
+
+                        <input
+                            class="login-input"
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                        >&#128065;</button>
+
+                        <div class="password-strength">
+                            <div
+                                class="strength-bar"
+                                id="strength"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="login-btn"
+                        id="loginButton"
+                    >
+                        Sign In
+                    </button>
+
+                    <div
+                        class="login-error"
+                        id="loginError"
+                    ></div>
+
+                </form>
+
+                <button
+                    type="button"
+                    class="login-btn"
+                    id="showSignupButton"
+                    style="margin-top:12px;background:transparent;border:1px solid rgba(255,255,255,.25);"
+                >
+                    Create New Account
+                </button>
+
+            </div>
+
+
+            <div
+                id="authSignupView"
+                style="display:none;"
+            >
+
+                <h3 style="margin:0 0 15px;">
+                    Create Account
+                </h3>
+
+                <form id="signupForm">
+
+                    <div class="login-input-wrap">
+
+                        <span class="input-icon">&#9993;</span>
+
+                        <input
+                            class="login-input"
+                            type="text"
+                            id="signupUsername"
+                            placeholder="Choose username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="login-input-wrap">
+
+                        <span class="input-icon">&#128274;</span>
+
+                        <input
+                            class="login-input"
+                            type="password"
+                            id="signupPassword"
+                            placeholder="Create password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="login-input-wrap">
+
+                        <span class="input-icon">&#128274;</span>
+
+                        <input
+                            class="login-input"
+                            type="password"
+                            id="signupConfirmPassword"
+                            placeholder="Confirm password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="login-btn"
+                        id="signupButton"
+                    >
+                        Create Account
+                    </button>
+
+                    <div
+                        class="login-error"
+                        id="signupError"
+                    ></div>
+
+                </form>
+
+                <button
+                    type="button"
+                    class="login-btn"
+                    id="backToLoginButton"
+                    style="margin-top:12px;background:transparent;border:1px solid rgba(255,255,255,.25);"
+                >
+                    Back to Sign In
+                </button>
+
+            </div>
+
+
+            <div class="login-footer">
+                Secure Expense Management
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
+
+<div
+    id="changePasswordModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:9999;
+        background:rgba(0,0,0,.72);
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+
+    <div
+        style="
+            width:100%;
+            max-width:430px;
+            background:#ffffff;
+            border-radius:18px;
+            padding:25px;
+            box-shadow:0 20px 60px rgba(0,0,0,.35);
+        "
+    >
+
+        <h2 style="margin-top:0;">
+            Change Password
+        </h2>
+
+        <p style="color:#666;margin-bottom:20px;">
+            Update your account password securely.
+        </p>
+
+        <form id="changePasswordForm">
+
+            <input
+                type="password"
+                id="currentPassword"
+                placeholder="Current password"
+                autocomplete="current-password"
+                required
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:13px;
+                    margin-bottom:12px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                "
+            >
+
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="New password"
+                autocomplete="new-password"
+                required
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:13px;
+                    margin-bottom:12px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                "
+            >
+
+            <input
+                type="password"
+                id="confirmNewPassword"
+                placeholder="Confirm new password"
+                autocomplete="new-password"
+                required
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:13px;
+                    margin-bottom:12px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                "
+            >
+
+            <div
+                id="changePasswordMessage"
+                style="
+                    display:none;
+                    margin-bottom:12px;
+                    padding:10px;
+                    border-radius:8px;
+                "
+            ></div>
+
+            <button
+                type="submit"
+                id="changePasswordButton"
+                class="login-btn"
+                style="width:100%;"
+            >
+                Change Password
+            </button>
+
+            <button
+                type="button"
+                onclick="closeChangePassword()"
+                style="
+                    width:100%;
+                    margin-top:10px;
+                    padding:12px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    background:#f5f5f5;
+                    cursor:pointer;
+                "
+            >
+                Cancel
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div id="appScreen">
+
+<header>
+
+    <div class="header-inner">
+
+        <div class="header-top">
+
+            <div>
+                <h1>Chisomo's Expense Tracker</h1>
+
+                <p>
+                    Simple and reliable personal expense management
+                </p>
+            </div>
+
+            <div class="user-area">
+
+                <span
+                    class="user-name"
+                    id="loggedUser"
+                >
+                    Signed in
+                </span>
+
+                <button
+                    class="logout-btn"
+                    onclick="openChangePassword()"
+                    
+                >
+                    Change Password
+                </button>
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+        <nav>
+            <span>Dashboard</span>
+            <span>Expenses</span>
+            <span>Budget</span>
+            <span>Reports</span>
+        </nav>
+
+    </div>
 
 </header>
 
 <main>
 
-<!-- DASHBOARD -->
-
 <div class="dashboard">
 
-<div class="card stat-card">
-<div class="stat-label">TOTAL SPENDING</div>
-<div class="value" id="total">MK 0.00</div>
+    <div class="card stat-card">
+        <div class="stat-label">
+            Total Spending
+        </div>
+        <div class="value" id="total">
+            MK 0.00
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="stat-label">
+            Today's Spending
+        </div>
+        <div class="value" id="today">
+            MK 0.00
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="stat-label">
+            This Month
+        </div>
+        <div class="value" id="month">
+            MK 0.00
+        </div>
+    </div>
+
+    <div class="card stat-card">
+        <div class="stat-label">
+            Expense Count
+        </div>
+        <div class="value" id="count">
+            0
+        </div>
+    </div>
+
 </div>
-
-<div class="card stat-card">
-<div class="stat-label">TODAY</div>
-<div class="value" id="today">MK 0.00</div>
-</div>
-
-<div class="card stat-card">
-<div class="stat-label">THIS MONTH</div>
-<div class="value" id="month">MK 0.00</div>
-</div>
-
-<div class="card stat-card">
-<div class="stat-label">EXPENSES</div>
-<div class="value" id="count">0</div>
-</div>
-
-</div>
-
-
-<!-- ADD EXPENSE -->
 
 <div class="card section">
 
-<h2 id="formTitle">
-Add Expense
-</h2>
+    <h2 id="formTitle">
+        Add Expense
+    </h2>
 
-<form id="expenseForm">
+    <form id="expenseForm">
 
-<input
-type="hidden"
-id="expenseId"
->
+        <input
+            type="hidden"
+            id="expenseId"
+        >
 
-<input
-type="number"
-id="amount"
-placeholder="Amount in MK"
-step="0.01"
-min="0"
-required
->
+        <label for="amount">
+            Amount (MK)
+        </label>
 
-<select
-id="category"
-required
->
+        <input
+            type="number"
+            id="amount"
+            step="0.01"
+            min="0"
+            placeholder="Enter amount"
+            required
+        >
 
-<option value="">
-Select category
-</option>
+        <label for="category">
+            Category
+        </label>
 
-<option>Food</option>
-<option>Transport</option>
-<option>Rent</option>
-<option>Bills</option>
-<option>Shopping</option>
-<option>Health</option>
-<option>Education</option>
-<option>Entertainment</option>
-<option>Other</option>
+        <select
+            id="category"
+            required
+        >
+            <option value="">
+                Select category
+            </option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Bills">Bills</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Other">Other</option>
+        </select>
 
-</select>
+        <label for="description">
+            Description
+        </label>
 
-<textarea
-id="description"
-placeholder="Description"
-></textarea>
+        <textarea
+            id="description"
+            placeholder="Optional description"
+        ></textarea>
 
-<input
-type="date"
-id="expenseDate"
-required
->
+        <label for="expenseDate">
+            Date
+        </label>
 
-<button type="submit">
-Save Expense
-</button>
+        <input
+            type="date"
+            id="expenseDate"
+            required
+        >
 
-<button
-type="button"
-class="cancel"
-id="cancelButton"
-style="display:none"
->
-Cancel Edit
-</button>
+        <button type="submit">
+            Save Expense
+        </button>
 
-</form>
+        <button
+            type="button"
+            class="cancel"
+            id="cancelButton"
+            style="display:none;"
+        >
+            Cancel Edit
+        </button>
+
+    </form>
 
 </div>
-
-
 
 
 <!-- MONTHLY BUDGET -->
 
 <div class="card section">
 
-<h2>Monthly Budget</h2>
+    <h2>Monthly Budget</h2>
 
-<p>
-Budget:
-<strong id="budget">MK 0.00</strong>
-</p>
+    <p>
+        Budget:
+        <strong id="budget">MK 0.00</strong>
+    </p>
 
-<p>
-Spent This Month:
-<strong id="budgetSpent">MK 0.00</strong>
-</p>
+    <p>
+        Spent This Month:
+        <strong id="budgetSpent">MK 0.00</strong>
+    </p>
 
-<p>
-Remaining:
-<strong id="remaining">MK 0.00</strong>
-</p>
+    <p>
+        Remaining:
+        <strong id="remaining">MK 0.00</strong>
+    </p>
 
-<div style="
-    width:100%;
-    height:10px;
-    background:#e5e7eb;
-    border-radius:20px;
-    overflow:hidden;
-">
+    <div style="
+        width:100%;
+        height:10px;
+        background:#e5e7eb;
+        border-radius:20px;
+        overflow:hidden;
+    ">
 
-    <div
-        id="budgetProgress"
-        style="
-            width:0%;
-            height:100%;
-            background:#172033;
-            transition:width .3s;
-        "
-    ></div>
+        <div
+            id="budgetProgress"
+            style="
+                width:0%;
+                height:100%;
+                background:#172033;
+                transition:width .3s;
+            "
+        ></div>
 
-</div>
+    </div>
 
-<p>
-Budget Used:
-<strong id="budgetPercent">0%</strong>
-</p>
+    <p>
+        Budget Used:
+        <strong id="budgetPercent">0%</strong>
+    </p>
 
-<input
-    type="number"
-    id="budgetInput"
-    placeholder="Enter monthly budget in MK"
-    min="0"
->
+    <input
+        type="number"
+        id="budgetInput"
+        placeholder="Enter monthly budget in MK"
+        min="0"
+    >
 
-<button
-    onclick="saveBudget()"
->
-Save Budget
-</button>
+    <button onclick="saveBudget()">
+        Save Budget
+    </button>
 
 </div>
 
@@ -554,11 +1206,11 @@ Save Budget
 
 <div class="card section">
 
-<h2>Spending by Category</h2>
+    <h2>Spending by Category</h2>
 
-<div id="categories">
-No spending recorded yet.
-</div>
+    <div id="categories">
+        No spending recorded yet.
+    </div>
 
 </div>
 
@@ -567,21 +1219,24 @@ No spending recorded yet.
 
 <div class="card section">
 
-<h2>Expense History</h2>
+    <h2>Expense History</h2>
 
-<input
-type="text"
-id="search"
-placeholder="Search expenses..."
->
+    <input
+        class="search-box"
+        type="text"
+        id="search"
+        placeholder="Search expenses..."
+    >
 
-<div id="expenseList">
-Loading...
-</div>
+    <div id="expenseList">
+        Loading...
+    </div>
 
 </div>
 
 </main>
+
+</div>
 
 
 <script>
@@ -589,923 +1244,1742 @@ Loading...
 let expenses = [];
 
 
+/* =========================
+   AUTHENTICATION
+========================= */
+
+const loginScreen =
+    document.getElementById("loginScreen");
+
+const appScreen =
+    document.getElementById("appScreen");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginUsername =
+    document.getElementById("loginUsername");
+
+const loginPassword =
+    document.getElementById("loginPassword");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const authLoginView =
+    document.getElementById("authLoginView");
+
+const authSignupView =
+    document.getElementById("authSignupView");
+
+const signupForm =
+    document.getElementById("signupForm");
+
+const signupUsername =
+    document.getElementById("signupUsername");
+
+const signupPassword =
+    document.getElementById("signupPassword");
+
+const signupConfirmPassword =
+    document.getElementById("signupConfirmPassword");
+
+const signupButton =
+    document.getElementById("signupButton");
+
+const signupError =
+    document.getElementById("signupError");
+
+const showSignupButton =
+    document.getElementById("showSignupButton");
+
+const backToLoginButton =
+    document.getElementById("backToLoginButton");
+
+
+function showSignupError(message) {
+
+    signupError.textContent = message;
+    signupError.style.display = "block";
+
+}
+
+
+function hideSignupError() {
+
+    signupError.textContent = "";
+    signupError.style.display = "none";
+
+}
+
+
+showSignupButton.addEventListener(
+    "click",
+    function() {
+
+        hideLoginError();
+
+        authLoginView.style.display = "none";
+        authSignupView.style.display = "block";
+
+        signupUsername.focus();
+
+    }
+);
+
+
+backToLoginButton.addEventListener(
+    "click",
+    function() {
+
+        hideSignupError();
+
+        authSignupView.style.display = "none";
+        authLoginView.style.display = "block";
+
+        loginUsername.focus();
+
+    }
+);
+
+
+signupForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        hideSignupError();
+
+        const username =
+            signupUsername.value.trim();
+
+        const password =
+            signupPassword.value;
+
+        const confirmPassword =
+            signupConfirmPassword.value;
+
+
+        if (!username || !password || !confirmPassword) {
+
+            showSignupError(
+                "Complete all fields."
+            );
+
+            return;
+
+        }
+
+
+        if (password.length < 8) {
+
+            showSignupError(
+                "Password must be at least 8 characters."
+            );
+
+            return;
+
+        }
+
+
+        if (password !== confirmPassword) {
+
+            showSignupError(
+                "Passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        signupButton.disabled = true;
+        signupButton.textContent =
+            "Creating Account...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/signup",
+                    {
+                        method: "POST",
+
+                        credentials:
+                            "same-origin",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                username:
+                                    username,
+
+                                password:
+                                    password,
+
+                                confirm_password:
+                                    confirmPassword
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                showSignupError(
+                    result.error ||
+                    "Unable to create account."
+                );
+
+                return;
+
+            }
+
+
+            signupUsername.value = "";
+            signupPassword.value = "";
+            signupConfirmPassword.value = "";
+
+
+            const authenticated =
+                await checkLogin();
+
+
+            if (authenticated) {
+
+                await loadExpenses();
+                await loadStats();
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Signup failed:",
+                error
+            );
+
+            showSignupError(
+                "Unable to connect to the server."
+            );
+
+
+        } finally {
+
+            signupButton.disabled = false;
+            signupButton.textContent =
+                "Create Account";
+
+        }
+
+    }
+);
+
+
+
+
+const loginError =
+    document.getElementById("loginError");
+
+const loginCard =
+    document.getElementById("loginCard");
+
+
+function showLoginError(message) {
+
+    loginError.textContent = message;
+    loginError.style.display = "block";
+
+}
+
+
+function hideLoginError() {
+
+    loginError.textContent = "";
+    loginError.style.display = "none";
+
+}
+
+
+async function checkLogin() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/session",
+                {
+                    method: "GET",
+                    credentials: "same-origin"
+                }
+            );
+
+        const data =
+            await response.json();
+
+
+        if (data.authenticated) {
+
+            loginScreen.style.display = "none";
+            appScreen.style.display = "block";
+
+            document.getElementById(
+                "loggedUser"
+            ).textContent =
+                data.username || "Signed in";
+
+            return true;
+
+        }
+
+
+        loginScreen.style.display = "flex";
+        appScreen.style.display = "none";
+
+        return false;
+
+
+    } catch (error) {
+
+        console.error(
+            "Session check failed:",
+            error
+        );
+
+        loginScreen.style.display = "flex";
+        appScreen.style.display = "none";
+
+        showLoginError(
+            "Unable to connect to the server."
+        );
+
+        return false;
+
+    }
+
+}
+
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        hideLoginError();
+
+        const username =
+            loginUsername.value.trim();
+
+        const password =
+            loginPassword.value;
+
+
+        if (!username || !password) {
+
+            showLoginError(
+                "Enter your username and password."
+            );
+
+            return;
+
+        }
+
+
+        loginButton.disabled = true;
+        loginButton.textContent =
+            "Signing In...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/login",
+                    {
+                        method: "POST",
+
+                        credentials:
+                            "same-origin",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                username:
+                                    username,
+
+                                password:
+                                    password
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                showLoginError(
+                    result.error ||
+                    "Invalid username or password."
+                );
+
+                return;
+
+            }
+
+
+            loginUsername.value = "";
+            loginPassword.value = "";
+
+
+            document.getElementById(
+                "strength"
+            ).className =
+                "strength-bar";
+
+
+            const authenticated =
+                await checkLogin();
+
+
+            if (authenticated) {
+
+                await loadExpenses();
+                await loadStats();
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Login failed:",
+                error
+            );
+
+            showLoginError(
+                "Unable to connect to the server."
+            );
+
+
+        } finally {
+
+            loginButton.disabled = false;
+            loginButton.textContent =
+                "Sign In";
+
+        }
+
+    }
+);
+
+
+
+/* =========================
+   CHANGE PASSWORD
+========================= */
+
+function openChangePassword() {
+
+    const modal =
+        document.getElementById(
+            "changePasswordModal"
+        );
+
+    modal.style.display = "flex";
+
+    document.getElementById(
+        "changePasswordForm"
+    ).reset();
+
+    hideChangePasswordMessage();
+
+}
+
+
+function closeChangePassword() {
+
+    document.getElementById(
+        "changePasswordModal"
+    ).style.display = "none";
+
+}
+
+
+function showChangePasswordMessage(
+    message,
+    success = false
+) {
+
+    const box =
+        document.getElementById(
+            "changePasswordMessage"
+        );
+
+    box.textContent = message;
+    box.style.display = "block";
+
+    if (success) {
+
+        box.style.background = "#e8f5e9";
+        box.style.color = "#1b5e20";
+
+    } else {
+
+        box.style.background = "#ffebee";
+        box.style.color = "#b71c1c";
+
+    }
+
+}
+
+
+function hideChangePasswordMessage() {
+
+    const box =
+        document.getElementById(
+            "changePasswordMessage"
+        );
+
+    box.textContent = "";
+    box.style.display = "none";
+
+}
+
+
+document.getElementById(
+    "changePasswordForm"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        hideChangePasswordMessage();
+
+        const currentPassword =
+            document.getElementById(
+                "currentPassword"
+            ).value;
+
+        const newPassword =
+            document.getElementById(
+                "newPassword"
+            ).value;
+
+        const confirmNewPassword =
+            document.getElementById(
+                "confirmNewPassword"
+            ).value;
+
+        const button =
+            document.getElementById(
+                "changePasswordButton"
+            );
+
+
+        if (
+            !currentPassword ||
+            !newPassword ||
+            !confirmNewPassword
+        ) {
+
+            showChangePasswordMessage(
+                "Complete all password fields."
+            );
+
+            return;
+
+        }
+
+
+        if (newPassword.length < 8) {
+
+            showChangePasswordMessage(
+                "New password must be at least 8 characters."
+            );
+
+            return;
+
+        }
+
+
+        if (newPassword !== confirmNewPassword) {
+
+            showChangePasswordMessage(
+                "New passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        button.disabled = true;
+        button.textContent =
+            "Changing Password...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/change-password",
+                    {
+                        method: "POST",
+
+                        credentials:
+                            "same-origin",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                current_password:
+                                    currentPassword,
+
+                                new_password:
+                                    newPassword,
+
+                                confirm_password:
+                                    confirmNewPassword
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                showChangePasswordMessage(
+                    result.error ||
+                    "Unable to change password."
+                );
+
+                return;
+
+            }
+
+
+            showChangePasswordMessage(
+                "Password changed successfully.",
+                true
+            );
+
+
+            document.getElementById(
+                "changePasswordForm"
+            ).reset();
+
+
+            setTimeout(
+                closeChangePassword,
+                1200
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Change password failed:",
+                error
+            );
+
+            showChangePasswordMessage(
+                "Unable to connect to the server."
+            );
+
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent =
+                "Change Password";
+
+        }
+
+    }
+);
+
+
+async function logout() {
+
+    try {
+
+        await fetch(
+            "/api/logout",
+            {
+                method: "POST",
+                credentials: "same-origin"
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Logout request failed:",
+            error
+        );
+
+    }
+
+
+    loginPassword.value = "";
+
+    hideLoginError();
+
+    await checkLogin();
+
+}
+
+
+/* =========================
+   PASSWORD VISIBILITY
+========================= */
+
+document
+    .getElementById("togglePassword")
+    .addEventListener(
+        "click",
+        function() {
+
+            const input =
+                document.getElementById(
+                    "loginPassword"
+                );
+
+            if (
+                input.type === "password"
+            ) {
+
+                input.type = "text";
+
+            } else {
+
+                input.type = "password";
+
+            }
+
+        }
+    );
+
+
+/* =========================
+   PASSWORD STRENGTH
+========================= */
+
+loginPassword.addEventListener(
+    "input",
+    function() {
+
+        const value = this.value;
+
+        const bar =
+            document.getElementById(
+                "strength"
+            );
+
+        bar.className =
+            "strength-bar";
+
+
+        if (value.length > 0) {
+
+            bar.classList.add("weak");
+
+        }
+
+        if (
+            value.length > 5 &&
+            /[A-Z]/.test(value)
+        ) {
+
+            bar.classList.remove("weak");
+            bar.classList.add("medium");
+
+        }
+
+        if (
+            value.length > 8 &&
+            /[A-Z]/.test(value) &&
+            /[0-9]/.test(value)
+        ) {
+
+            bar.classList.remove("medium");
+            bar.classList.add("strong");
+
+        }
+
+    }
+);
+
+
+/* =========================
+   3D LOGIN TILT
+========================= */
+
+document.addEventListener(
+    "mousemove",
+    function(event) {
+
+        if (
+            loginScreen.style.display === "none"
+        ) {
+            return;
+        }
+
+        const x =
+            (
+                window.innerWidth / 2 -
+                event.pageX
+            ) / 25;
+
+        const y =
+            (
+                window.innerHeight / 2 -
+                event.pageY
+            ) / 25;
+
+        loginCard.style.transform =
+            `rotateY(${x}deg) rotateX(${y}deg)`;
+
+    }
+);
+
+
+/*
+ Touch devices do not have mouse movement,
+ so keep the card stable rather than trying
+ to create a fake tilt.
+*/
+
+
+loginScreen.addEventListener(
+    "mouseleave",
+    function() {
+
+        loginCard.style.transform =
+            "rotateY(0deg) rotateX(0deg)";
+
+    }
+);
+
+
+/* =========================
+   EXPENSE TRACKER
+========================= */
+
 const form =
-document.getElementById("expenseForm");
+    document.getElementById(
+        "expenseForm"
+    );
 
 
-document.getElementById("expenseDate").value =
-new Date().toISOString().split("T")[0];
+document.getElementById(
+    "expenseDate"
+).value =
+    new Date()
+        .toISOString()
+        .split("T")[0];
 
 
 function money(value) {
 
-return "MK " +
-Number(value).toLocaleString(
-"en-MW",
-{
-minimumFractionDigits: 2,
-maximumFractionDigits: 2
-}
-);
+    return "MK " +
+        Number(value).toLocaleString(
+            "en-MW",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
 
 }
 
 
 async function loadExpenses() {
 
-const response =
-await fetch("/api/expenses");
+    try {
 
-expenses =
-await response.json();
+        const response =
+            await fetch("/api/expenses");
 
-renderExpenses();
+        if (!response.ok) {
 
-updateDashboard();
+            throw new Error(
+                "Unable to load expenses."
+            );
+
+        }
+
+        expenses =
+            await response.json();
+
+        renderExpenses();
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "expenseList"
+        ).innerHTML =
+            "<p>Unable to load expenses.</p>";
+
+    }
 
 }
 
 
 function renderExpenses() {
 
-const list =
-document.getElementById("expenseList");
+    const list =
+        document.getElementById(
+            "expenseList"
+        );
 
-const search =
-document.getElementById("search")
-.value
-.toLowerCase();
+    const search =
+        document.getElementById(
+            "search"
+        )
+        .value
+        .toLowerCase()
+        .trim();
 
-const filtered =
-expenses.filter(expense =>
 
-expense.category
-.toLowerCase()
-.includes(search)
+    const filtered =
+        expenses.filter(
+            expense =>
 
-||
+                expense.category
+                    .toLowerCase()
+                    .includes(search)
 
-(expense.description || "")
-.toLowerCase()
-.includes(search)
+                ||
 
-||
+                (
+                    expense.description || ""
+                )
+                    .toLowerCase()
+                    .includes(search)
 
-expense.expense_date
-.includes(search)
+                ||
 
-);
+                expense.expense_date
+                    .includes(search)
+        );
 
 
-if (!filtered.length) {
+    if (!filtered.length) {
 
-list.innerHTML =
-"<p>No expenses found.</p>";
-
-return;
-
-}
-
-
-list.innerHTML =
-filtered.map(expense => `
-
-<div class="expense">
-
-<div class="expense-top">
-
-<div>
-
-<div class="amount">
-${money(expense.amount)}
-</div>
-
-<span class="category">
-${escapeHtml(expense.category)}
-</span>
-
-</div>
-
-<div class="date">
-${expense.expense_date}
-</div>
-
-</div>
-
-${
-expense.description
-?
-`<p>${escapeHtml(expense.description)}</p>`
-:
-""
-}
-
-<div class="actions">
-
-<button
-onclick="editExpense(${expense.id})"
->
-Edit
-</button>
-
-<button
-class="delete"
-onclick="deleteExpense(${expense.id})"
->
-Delete
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
-}
-
-
-function updateDashboard() {
-
-const total =
-expenses.reduce(
-(sum, expense) =>
-sum + Number(expense.amount),
-0
-);
-
-const today =
-new Date()
-.toISOString()
-.split("T")[0];
-
-const todayTotal =
-expenses
-.filter(expense =>
-expense.expense_date === today
-)
-.reduce(
-(sum, expense) =>
-sum + Number(expense.amount),
-0
-);
-
-const month =
-new Date()
-.toISOString()
-.slice(0, 7);
-
-const monthTotal =
-expenses
-.filter(expense =>
-expense.expense_date.startsWith(month)
-)
-.reduce(
-(sum, expense) =>
-sum + Number(expense.amount),
-0
-);
-
-
-document.getElementById("total")
-.textContent = money(total);
-
-document.getElementById("today")
-.textContent = money(todayTotal);
-
-document.getElementById("month")
-.textContent = money(monthTotal);
-
-document.getElementById("count")
-.textContent = expenses.length;
-
-}
-
-
-form.addEventListener(
-"submit",
-async event => {
-
-event.preventDefault();
-
-
-const id =
-document.getElementById("expenseId")
-.value;
-
-
-const data = {
-
-amount:
-document.getElementById("amount").value,
-
-category:
-document.getElementById("category").value,
-
-description:
-document.getElementById("description").value,
-
-expense_date:
-document.getElementById("expenseDate").value
-
-};
-
-
-const url =
-id
-?
-`/api/expenses/${id}`
-:
-"/api/expenses";
-
-
-const method =
-id ? "PUT" : "POST";
-
-
-const response =
-await fetch(
-url,
-{
-method,
-headers: {
-"Content-Type":
-"application/json"
-},
-body:
-JSON.stringify(data)
-}
-);
-
-
-const result =
-await response.json();
-
-
-if (!response.ok) {
-
-alert(result.error);
-
-return;
-
-}
-
-
-resetForm();
-
-await 
-async function loadStats() {
-
-    const response =
-        await fetch("/api/stats");
-
-    const data =
-        await response.json();
-
-    document.getElementById("total")
-        .textContent = money(data.total);
-
-    document.getElementById("today")
-        .textContent = money(data.today);
-
-    document.getElementById("month")
-        .textContent = money(data.month);
-
-    document.getElementById("count")
-        .textContent = data.count;
-
-
-    const budgetResponse =
-        await fetch("/api/budget");
-
-    const budgetData =
-        await budgetResponse.json();
-
-    const budget =
-        Number(budgetData.monthly_budget || 0);
-
-    const spent =
-        Number(data.month || 0);
-
-    const remaining =
-        budget - spent;
-
-    let percentage = 0;
-
-    if (budget > 0) {
-        percentage =
-            Math.min(
-                100,
-                (spent / budget) * 100
-            );
-    }
-
-    document.getElementById("budget")
-        .textContent = money(budget);
-
-    document.getElementById("budgetSpent")
-        .textContent = money(spent);
-
-    document.getElementById("remaining")
-        .textContent = money(remaining);
-
-    document.getElementById("budgetPercent")
-        .textContent =
-        Math.round(percentage) + "%";
-
-    document.getElementById("budgetProgress")
-        .style.width =
-        percentage + "%";
-
-
-    const categories =
-        document.getElementById("categories");
-
-    if (!data.categories.length) {
-
-        categories.innerHTML =
-            "<p>No spending recorded yet.</p>";
+        list.innerHTML =
+            "<p>No expenses found.</p>";
 
         return;
+
     }
 
 
-    categories.innerHTML =
-        data.categories.map(item => `
+    list.innerHTML =
+        filtered.map(
+            expense => `
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                padding:12px 0;
-                border-bottom:1px solid #e5e7eb;
-            ">
+            <div class="expense">
 
-                <strong>
-                    ${escapeHtml(item.category)}
-                </strong>
+                <div class="expense-top">
 
-                <span>
-                    ${money(item.total)}
-                </span>
+                    <div>
+
+                        <div class="amount">
+                            ${money(expense.amount)}
+                        </div>
+
+                        <span class="category">
+                            ${escapeHtml(
+                                expense.category
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="date">
+                        ${escapeHtml(
+                            expense.expense_date
+                        )}
+                    </div>
+
+                </div>
+
+                ${
+                    expense.description
+                    ?
+                    `<p>${escapeHtml(
+                        expense.description
+                    )}</p>`
+                    :
+                    ""
+                }
+
+                <div class="actions">
+
+                    <button
+                        onclick="editExpense(
+                            ${expense.id}
+                        )"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete"
+                        onclick="deleteExpense(
+                            ${expense.id}
+                        )"
+                    >
+                        Delete
+                    </button>
+
+                </div>
 
             </div>
 
-        `).join("");
+        `
+        ).join("");
 
 }
 
 
+
+/* =========================
+   DASHBOARD STATISTICS
+========================= */
+
+async function loadStats() {
+
+    try {
+
+        const response =
+            await fetch("/api/stats");
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load statistics."
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+
+        document.getElementById("total")
+            .textContent =
+            money(data.total);
+
+        document.getElementById("today")
+            .textContent =
+            money(data.today);
+
+        document.getElementById("month")
+            .textContent =
+            money(data.month);
+
+        document.getElementById("count")
+            .textContent =
+            data.count;
+
+
+        /* =========================
+           BUDGET
+        ========================= */
+
+        const budgetResponse =
+            await fetch("/api/budget");
+
+        if (!budgetResponse.ok) {
+
+            throw new Error(
+                "Unable to load budget."
+            );
+
+        }
+
+        const budgetData =
+            await budgetResponse.json();
+
+        const budget =
+            Number(
+                budgetData.monthly_budget || 0
+            );
+
+        const spent =
+            Number(data.month || 0);
+
+        const remaining =
+            budget - spent;
+
+        let percentage = 0;
+
+
+        if (budget > 0) {
+
+            percentage =
+                (spent / budget) * 100;
+
+            percentage =
+                Math.min(
+                    100,
+                    percentage
+                );
+
+        }
+
+
+        document.getElementById(
+            "budget"
+        ).textContent =
+            money(budget);
+
+
+        document.getElementById(
+            "budgetSpent"
+        ).textContent =
+            money(spent);
+
+
+        document.getElementById(
+            "remaining"
+        ).textContent =
+            money(remaining);
+
+
+        document.getElementById(
+            "budgetPercent"
+        ).textContent =
+            Math.round(
+                percentage
+            ) + "%";
+
+
+        document.getElementById(
+            "budgetProgress"
+        ).style.width =
+            percentage + "%";
+
+
+        /* =========================
+           BUDGET STATUS
+        ========================= */
+
+        const remainingElement =
+            document.getElementById(
+                "remaining"
+            );
+
+
+        if (budget > 0 && remaining < 0) {
+
+            remainingElement.style.color =
+                "#dc2626";
+
+        } else if (budget > 0) {
+
+            remainingElement.style.color =
+                "#15803d";
+
+        } else {
+
+            remainingElement.style.color =
+                "";
+
+        }
+
+
+        /* =========================
+           SPENDING CATEGORIES
+        ========================= */
+
+        const categories =
+            document.getElementById(
+                "categories"
+            );
+
+
+        if (
+            !data.categories ||
+            !data.categories.length
+        ) {
+
+            categories.innerHTML =
+                "<p>No spending recorded yet.</p>";
+
+        } else {
+
+            categories.innerHTML =
+                data.categories.map(
+                    item => `
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        gap:15px;
+                        padding:12px 0;
+                        border-bottom:
+                            1px solid #e5e7eb;
+                    ">
+
+                        <strong>
+                            ${escapeHtml(
+                                item.category
+                            )}
+                        </strong>
+
+                        <span>
+                            ${money(
+                                item.total
+                            )}
+                        </span>
+
+                    </div>
+
+                `
+                ).join("");
+
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================
+   LOAD BUDGET
+========================= */
 
 async function loadBudget() {
 
-    const response =
-        await fetch("/api/budget");
+    try {
 
-    const data =
-        await response.json();
+        const response =
+            await fetch("/api/budget");
 
-    const budget =
-        Number(data.monthly_budget || 0);
+        if (!response.ok) {
 
-    document.getElementById("budget")
-        .textContent = money(budget);
+            throw new Error(
+                "Unable to load budget."
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        const budget =
+            Number(
+                data.monthly_budget || 0
+            );
+
+
+        document.getElementById(
+            "budget"
+        ).textContent =
+            money(budget);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
 
 }
 
+
+/* =========================
+   SAVE BUDGET
+========================= */
 
 async function saveBudget() {
 
     const input =
-        document.getElementById("budgetInput");
-
-    const budget =
-        Number(input.value);
-
-
-    if (budget < 0 || !input.value) {
-
-        alert("Enter a valid budget.");
-
-        return;
-    }
-
-
-    const response =
-        await fetch(
-            "/api/budget",
-            {
-                method: "PUT",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    monthly_budget:
-                        budget
-                })
-            }
+        document.getElementById(
+            "budgetInput"
         );
 
 
-    if (!response.ok) {
+    const value =
+        input.value.trim();
 
-        alert("Unable to save budget.");
+
+    const budget =
+        Number(value);
+
+
+    if (
+        !value ||
+        !Number.isFinite(budget) ||
+        budget < 0
+    ) {
+
+        alert(
+            "Enter a valid budget."
+        );
 
         return;
+
     }
 
 
-    input.value = "";
+    try {
 
-    await loadBudget();
-    await loadStats();
+        const response =
+            await fetch(
+                "/api/budget",
+                {
+                    method: "PUT",
 
-    alert("Monthly budget saved.");
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            monthly_budget:
+                                budget
+                        })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.error ||
+                "Unable to save budget."
+            );
+
+            return;
+
+        }
+
+
+        input.value = "";
+
+        await loadBudget();
+
+        await loadStats();
+
+
+        alert(
+            "Monthly budget saved."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to connect to the server."
+        );
+
+    }
 
 }
 
 
-loadExpenses();
-loadStats();
-
-}
-);
-
+/* =========================
+   EDIT EXPENSE
+========================= */
 
 function editExpense(id) {
 
-const expense =
-expenses.find(
-item => item.id === id
-);
-
-if (!expense) return;
-
-
-document.getElementById("expenseId")
-.value = expense.id;
-
-document.getElementById("amount")
-.value = expense.amount;
-
-document.getElementById("category")
-.value = expense.category;
-
-document.getElementById("description")
-.value =
-expense.description || "";
-
-document.getElementById("expenseDate")
-.value = expense.expense_date;
-
-
-document.getElementById("formTitle")
-.textContent =
-"Edit Expense";
-
-document.getElementById("cancelButton")
-.style.display =
-"block";
-
-
-window.scrollTo({
-top: 0,
-behavior: "smooth"
-});
-
-}
-
-
-async function deleteExpense(id) {
-
-if (!confirm(
-"Are you sure you want to delete this expense?"
-)) {
-return;
-}
-
-
-const response =
-await fetch(
-`/api/expenses/${id}`,
-{
-method: "DELETE"
-}
-);
-
-
-if (response.ok) {
-
-await 
-async function loadStats() {
-
-    const response =
-        await fetch("/api/stats");
-
-    const data =
-        await response.json();
-
-    document.getElementById("total")
-        .textContent = money(data.total);
-
-    document.getElementById("today")
-        .textContent = money(data.today);
-
-    document.getElementById("month")
-        .textContent = money(data.month);
-
-    document.getElementById("count")
-        .textContent = data.count;
-
-
-    const budgetResponse =
-        await fetch("/api/budget");
-
-    const budgetData =
-        await budgetResponse.json();
-
-    const budget =
-        Number(budgetData.monthly_budget || 0);
-
-    const spent =
-        Number(data.month || 0);
-
-    const remaining =
-        budget - spent;
-
-    let percentage = 0;
-
-    if (budget > 0) {
-        percentage =
-            Math.min(
-                100,
-                (spent / budget) * 100
-            );
-    }
-
-    document.getElementById("budget")
-        .textContent = money(budget);
-
-    document.getElementById("budgetSpent")
-        .textContent = money(spent);
-
-    document.getElementById("remaining")
-        .textContent = money(remaining);
-
-    document.getElementById("budgetPercent")
-        .textContent =
-        Math.round(percentage) + "%";
-
-    document.getElementById("budgetProgress")
-        .style.width =
-        percentage + "%";
-
-
-    const categories =
-        document.getElementById("categories");
-
-    if (!data.categories.length) {
-
-        categories.innerHTML =
-            "<p>No spending recorded yet.</p>";
-
-        return;
-    }
-
-
-    categories.innerHTML =
-        data.categories.map(item => `
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                padding:12px 0;
-                border-bottom:1px solid #e5e7eb;
-            ">
-
-                <strong>
-                    ${escapeHtml(item.category)}
-                </strong>
-
-                <span>
-                    ${money(item.total)}
-                </span>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-
-async function loadBudget() {
-
-    const response =
-        await fetch("/api/budget");
-
-    const data =
-        await response.json();
-
-    const budget =
-        Number(data.monthly_budget || 0);
-
-    document.getElementById("budget")
-        .textContent = money(budget);
-
-}
-
-
-async function saveBudget() {
-
-    const input =
-        document.getElementById("budgetInput");
-
-    const budget =
-        Number(input.value);
-
-
-    if (budget < 0 || !input.value) {
-
-        alert("Enter a valid budget.");
-
-        return;
-    }
-
-
-    const response =
-        await fetch(
-            "/api/budget",
-            {
-                method: "PUT",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    monthly_budget:
-                        budget
-                })
-            }
+    const expense =
+        expenses.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
         );
 
 
-    if (!response.ok) {
-
-        alert("Unable to save budget.");
+    if (!expense) {
 
         return;
+
     }
 
 
-    input.value = "";
+    document.getElementById(
+        "expenseId"
+    ).value =
+        expense.id;
 
-    await loadBudget();
-    await loadStats();
 
-    alert("Monthly budget saved.");
+    document.getElementById(
+        "amount"
+    ).value =
+        expense.amount;
+
+
+    document.getElementById(
+        "category"
+    ).value =
+        expense.category;
+
+
+    document.getElementById(
+        "description"
+    ).value =
+        expense.description || "";
+
+
+    document.getElementById(
+        "expenseDate"
+    ).value =
+        expense.expense_date;
+
+
+    document.getElementById(
+        "formTitle"
+    ).textContent =
+        "Edit Expense";
+
+
+    document.getElementById(
+        "cancelButton"
+    ).style.display =
+        "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
 
 
-loadExpenses();
-loadStats();
+/* =========================
+   DELETE EXPENSE
+========================= */
+
+async function deleteExpense(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this expense?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/expenses/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                result.error ||
+                "Unable to delete expense."
+            );
+
+            return;
+
+        }
+
+
+        await loadExpenses();
+
+        await loadStats();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to connect to the server."
+        );
+
+    }
 
 }
 
-}
+
+/* =========================
+   ADD / UPDATE EXPENSE
+========================= */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
 
 
-document.getElementById("cancelButton")
-.onclick =
-resetForm;
+        const id =
+            document.getElementById(
+                "expenseId"
+            ).value;
+
+
+        const data = {
+
+            amount:
+                document.getElementById(
+                    "amount"
+                ).value,
+
+            category:
+                document.getElementById(
+                    "category"
+                ).value,
+
+            description:
+                document.getElementById(
+                    "description"
+                ).value,
+
+            expense_date:
+                document.getElementById(
+                    "expenseDate"
+                ).value
+
+        };
+
+
+        const url =
+            id
+            ?
+            `/api/expenses/${id}`
+            :
+            "/api/expenses";
+
+
+        const method =
+            id
+            ?
+            "PUT"
+            :
+            "POST";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method,
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(data)
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    result.error ||
+                    "Unable to save expense."
+                );
+
+                return;
+
+            }
+
+
+            resetForm();
+
+            await loadExpenses();
+
+            await loadStats();
+
+
+            alert(
+                id
+                ?
+                "Expense updated successfully."
+                :
+                "Expense added successfully."
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to connect to the server."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   RESET FORM
+========================= */
+
+document.getElementById(
+    "cancelButton"
+).onclick =
+    resetForm;
 
 
 function resetForm() {
 
-form.reset();
+    form.reset();
 
-document.getElementById("expenseId")
-.value = "";
 
-document.getElementById("formTitle")
-.textContent =
-"Add Expense";
+    document.getElementById(
+        "expenseId"
+    ).value = "";
 
-document.getElementById("cancelButton")
-.style.display =
-"none";
 
-document.getElementById("expenseDate")
-.value =
-new Date()
-.toISOString()
-.split("T")[0];
+    document.getElementById(
+        "formTitle"
+    ).textContent =
+        "Add Expense";
+
+
+    document.getElementById(
+        "cancelButton"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "expenseDate"
+    ).value =
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
 }
 
 
-document.getElementById("search")
-.addEventListener(
-"input",
-renderExpenses
+/* =========================
+   SEARCH
+========================= */
+
+document.getElementById(
+    "search"
+).addEventListener(
+    "input",
+    renderExpenses
 );
 
 
+/* =========================
+   HTML SECURITY
+========================= */
+
 function escapeHtml(value) {
 
-return String(value)
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#039;");
-
-}
-
-
-
-async function loadStats() {
-
-    const response =
-        await fetch("/api/stats");
-
-    const data =
-        await response.json();
-
-    document.getElementById("total")
-        .textContent = money(data.total);
-
-    document.getElementById("today")
-        .textContent = money(data.today);
-
-    document.getElementById("month")
-        .textContent = money(data.month);
-
-    document.getElementById("count")
-        .textContent = data.count;
-
-
-    const budgetResponse =
-        await fetch("/api/budget");
-
-    const budgetData =
-        await budgetResponse.json();
-
-    const budget =
-        Number(budgetData.monthly_budget || 0);
-
-    const spent =
-        Number(data.month || 0);
-
-    const remaining =
-        budget - spent;
-
-    let percentage = 0;
-
-    if (budget > 0) {
-        percentage =
-            Math.min(
-                100,
-                (spent / budget) * 100
-            );
-    }
-
-    document.getElementById("budget")
-        .textContent = money(budget);
-
-    document.getElementById("budgetSpent")
-        .textContent = money(spent);
-
-    document.getElementById("remaining")
-        .textContent = money(remaining);
-
-    document.getElementById("budgetPercent")
-        .textContent =
-        Math.round(percentage) + "%";
-
-    document.getElementById("budgetProgress")
-        .style.width =
-        percentage + "%";
-
-
-    const categories =
-        document.getElementById("categories");
-
-    if (!data.categories.length) {
-
-        categories.innerHTML =
-            "<p>No spending recorded yet.</p>";
-
-        return;
-    }
-
-
-    categories.innerHTML =
-        data.categories.map(item => `
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                padding:12px 0;
-                border-bottom:1px solid #e5e7eb;
-            ">
-
-                <strong>
-                    ${escapeHtml(item.category)}
-                </strong>
-
-                <span>
-                    ${money(item.total)}
-                </span>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-
-async function loadBudget() {
-
-    const response =
-        await fetch("/api/budget");
-
-    const data =
-        await response.json();
-
-    const budget =
-        Number(data.monthly_budget || 0);
-
-    document.getElementById("budget")
-        .textContent = money(budget);
-
-}
-
-
-async function saveBudget() {
-
-    const input =
-        document.getElementById("budgetInput");
-
-    const budget =
-        Number(input.value);
-
-
-    if (budget < 0 || !input.value) {
-
-        alert("Enter a valid budget.");
-
-        return;
-    }
-
-
-    const response =
-        await fetch(
-            "/api/budget",
-            {
-                method: "PUT",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    monthly_budget:
-                        budget
-                })
-            }
+    return String(value)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
         );
 
-
-    if (!response.ok) {
-
-        alert("Unable to save budget.");
-
-        return;
-    }
-
-
-    input.value = "";
-
-    await loadBudget();
-    await loadStats();
-
-    alert("Monthly budget saved.");
-
 }
 
 
-loadExpenses();
-loadStats();
+/* =========================
+   INITIALIZE
+========================= */
+
+if (checkLogin()) {
+
+    loadExpenses();
+    loadStats();
+
+}
 
 </script>
 
-</body>
 
+</body>
 </html>
