@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chisomo's Expense Tracker</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #172033;
+    --secondary: #475569;
+    --background: #f1f5f9;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --muted: #64748b;
+    --success: #15803d;
+    --danger: #dc2626;
+    --radius: 16px;
+}
+
+body {
+    margin: 0;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    background: var(--background);
+    color: #172033;
+}
+
+header {
+    background: var(--primary);
+    color: white;
+    padding: 22px 24px;
+    box-shadow:
+        0 2px 10px rgba(0,0,0,.12);
+}
+
+.header-inner {
+    max-width: 1150px;
+    margin: auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #cbd5e1;
+}
+
+nav {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+nav span {
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.08);
+    font-size: 13px;
+}
+
+main {
+    max-width: 1150px;
+    margin: auto;
+    padding: 24px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 16px;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow:
+        0 2px 8px rgba(15,23,42,.04);
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: "";
+    position: absolute;
+    right: -25px;
+    top: -25px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #f1f5f9;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.value {
+    margin-top: 9px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.section h2 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+form {
+    display: grid;
+    gap: 13px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--secondary);
+}
+
+input,
+select,
+textarea,
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #cbd5e1;
+    border-color: var(--secondary);
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: .9;
+}
+
+.cancel {
+    background: var(--secondary);
+}
+
+.delete {
+    background: var(--danger);
+}
+
+.search-box {
+    margin-bottom: 15px;
+}
+
+.expense {
+    padding: 16px 0;
+    border-bottom:
+        1px solid var(--border);
+}
+
+.expense:last-child {
+    border-bottom: none;
+}
+
+.expense-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.amount {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.category {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.date {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 11px;
+}
+
+.actions button {
+    width: auto;
+    padding: 7px 13px;
+    font-size: 12px;
+}
+
+.budget-number {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.budget-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.budget-box {
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.budget-box small {
+    color: var(--muted);
+}
+
+.progress-track {
+    width: 100%;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+#budgetProgress {
+    background: var(--primary) !important;
+    border-radius: 20px;
+}
+
+.category-row {
+    display: grid;
+    grid-template-columns:
+        130px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom:
+        1px solid var(--border);
+}
+
+.category-bar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.category-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 20px;
+}
+
+@media (max-width: 850px) {
+
+    .dashboard {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    main {
+        padding: 14px;
+    }
+
+    header {
+        padding: 20px 14px;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .value {
+        font-size: 19px;
+    }
+
+    .budget-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-row {
+        grid-template-columns:
+            100px 1fr auto;
+        font-size: 13px;
+    }
+
+}
+
+@media (max-width: 380px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="header-inner">
+
+<h1>Chisomo's Expense Tracker</h1>
+
+<p>
+Track your spending and manage your budget.
+</p>
+
+<nav>
+<span>Dashboard</span>
+<span>Expenses</span>
+<span>Budget</span>
+<span>Analytics</span>
+</nav>
+
+</div>
+
+</header>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard">
+
+<div class="card stat-card">
+<div class="stat-label">TOTAL SPENDING</div>
+<div class="value" id="total">MK 0.00</div>
+</div>
+
+<div class="card stat-card">
+<div class="stat-label">TODAY</div>
+<div class="value" id="today">MK 0.00</div>
+</div>
+
+<div class="card stat-card">
+<div class="stat-label">THIS MONTH</div>
+<div class="value" id="month">MK 0.00</div>
+</div>
+
+<div class="card stat-card">
+<div class="stat-label">EXPENSES</div>
+<div class="value" id="count">0</div>
+</div>
+
+</div>
+
+
+<!-- ADD EXPENSE -->
+
+<div class="card section">
+
+<h2 id="formTitle">
+Add Expense
+</h2>
+
+<form id="expenseForm">
+
+<input
+type="hidden"
+id="expenseId"
+>
+
+<input
+type="number"
+id="amount"
+placeholder="Amount in MK"
+step="0.01"
+min="0"
+required
+>
+
+<select
+id="category"
+required
+>
+
+<option value="">
+Select category
+</option>
+
+<option>Food</option>
+<option>Transport</option>
+<option>Rent</option>
+<option>Bills</option>
+<option>Shopping</option>
+<option>Health</option>
+<option>Education</option>
+<option>Entertainment</option>
+<option>Other</option>
+
+</select>
+
+<textarea
+id="description"
+placeholder="Description"
+></textarea>
+
+<input
+type="date"
+id="expenseDate"
+required
+>
+
+<button type="submit">
+Save Expense
+</button>
+
+<button
+type="button"
+class="cancel"
+id="cancelButton"
+style="display:none"
+>
+Cancel Edit
+</button>
+
+</form>
+
+</div>
+
+
+
+
+<!-- MONTHLY BUDGET -->
+
+<div class="card section">
+
+<h2>Monthly Budget</h2>
+
+<p>
+Budget:
+<strong id="budget">MK 0.00</strong>
+</p>
+
+<p>
+Spent This Month:
+<strong id="budgetSpent">MK 0.00</strong>
+</p>
+
+<p>
+Remaining:
+<strong id="remaining">MK 0.00</strong>
+</p>
+
+<div style="
+    width:100%;
+    height:10px;
+    background:#e5e7eb;
+    border-radius:20px;
+    overflow:hidden;
+">
+
+    <div
+        id="budgetProgress"
+        style="
+            width:0%;
+            height:100%;
+            background:#172033;
+            transition:width .3s;
+        "
+    ></div>
+
+</div>
+
+<p>
+Budget Used:
+<strong id="budgetPercent">0%</strong>
+</p>
+
+<input
+    type="number"
+    id="budgetInput"
+    placeholder="Enter monthly budget in MK"
+    min="0"
+>
+
+<button
+    onclick="saveBudget()"
+>
+Save Budget
+</button>
+
+</div>
+
+
+<!-- SPENDING BY CATEGORY -->
+
+<div class="card section">
+
+<h2>Spending by Category</h2>
+
+<div id="categories">
+No spending recorded yet.
+</div>
+
+</div>
+
+
+<!-- EXPENSE HISTORY -->
+
+<div class="card section">
+
+<h2>Expense History</h2>
+
+<input
+type="text"
+id="search"
+placeholder="Search expenses..."
+>
+
+<div id="expenseList">
+Loading...
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+let expenses = [];
+
+
+const form =
+document.getElementById("expenseForm");
+
+
+document.getElementById("expenseDate").value =
+new Date().toISOString().split("T")[0];
+
+
+function money(value) {
+
+return "MK " +
+Number(value).toLocaleString(
+"en-MW",
+{
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+}
+);
+
+}
+
+
+async function loadExpenses() {
+
+const response =
+await fetch("/api/expenses");
+
+expenses =
+await response.json();
+
+renderExpenses();
+
+updateDashboard();
+
+}
+
+
+function renderExpenses() {
+
+const list =
+document.getElementById("expenseList");
+
+const search =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+const filtered =
+expenses.filter(expense =>
+
+expense.category
+.toLowerCase()
+.includes(search)
+
+||
+
+(expense.description || "")
+.toLowerCase()
+.includes(search)
+
+||
+
+expense.expense_date
+.includes(search)
+
+);
+
+
+if (!filtered.length) {
+
+list.innerHTML =
+"<p>No expenses found.</p>";
+
+return;
+
+}
+
+
+list.innerHTML =
+filtered.map(expense => `
+
+<div class="expense">
+
+<div class="expense-top">
+
+<div>
+
+<div class="amount">
+${money(expense.amount)}
+</div>
+
+<span class="category">
+${escapeHtml(expense.category)}
+</span>
+
+</div>
+
+<div class="date">
+${expense.expense_date}
+</div>
+
+</div>
+
+${
+expense.description
+?
+`<p>${escapeHtml(expense.description)}</p>`
+:
+""
+}
+
+<div class="actions">
+
+<button
+onclick="editExpense(${expense.id})"
+>
+Edit
+</button>
+
+<button
+class="delete"
+onclick="deleteExpense(${expense.id})"
+>
+Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function updateDashboard() {
+
+const total =
+expenses.reduce(
+(sum, expense) =>
+sum + Number(expense.amount),
+0
+);
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+const todayTotal =
+expenses
+.filter(expense =>
+expense.expense_date === today
+)
+.reduce(
+(sum, expense) =>
+sum + Number(expense.amount),
+0
+);
+
+const month =
+new Date()
+.toISOString()
+.slice(0, 7);
+
+const monthTotal =
+expenses
+.filter(expense =>
+expense.expense_date.startsWith(month)
+)
+.reduce(
+(sum, expense) =>
+sum + Number(expense.amount),
+0
+);
+
+
+document.getElementById("total")
+.textContent = money(total);
+
+document.getElementById("today")
+.textContent = money(todayTotal);
+
+document.getElementById("month")
+.textContent = money(monthTotal);
+
+document.getElementById("count")
+.textContent = expenses.length;
+
+}
+
+
+form.addEventListener(
+"submit",
+async event => {
+
+event.preventDefault();
+
+
+const id =
+document.getElementById("expenseId")
+.value;
+
+
+const data = {
+
+amount:
+document.getElementById("amount").value,
+
+category:
+document.getElementById("category").value,
+
+description:
+document.getElementById("description").value,
+
+expense_date:
+document.getElementById("expenseDate").value
+
+};
+
+
+const url =
+id
+?
+`/api/expenses/${id}`
+:
+"/api/expenses";
+
+
+const method =
+id ? "PUT" : "POST";
+
+
+const response =
+await fetch(
+url,
+{
+method,
+headers: {
+"Content-Type":
+"application/json"
+},
+body:
+JSON.stringify(data)
+}
+);
+
+
+const result =
+await response.json();
+
+
+if (!response.ok) {
+
+alert(result.error);
+
+return;
+
+}
+
+
+resetForm();
+
+await 
+async function loadStats() {
+
+    const response =
+        await fetch("/api/stats");
+
+    const data =
+        await response.json();
+
+    document.getElementById("total")
+        .textContent = money(data.total);
+
+    document.getElementById("today")
+        .textContent = money(data.today);
+
+    document.getElementById("month")
+        .textContent = money(data.month);
+
+    document.getElementById("count")
+        .textContent = data.count;
+
+
+    const budgetResponse =
+        await fetch("/api/budget");
+
+    const budgetData =
+        await budgetResponse.json();
+
+    const budget =
+        Number(budgetData.monthly_budget || 0);
+
+    const spent =
+        Number(data.month || 0);
+
+    const remaining =
+        budget - spent;
+
+    let percentage = 0;
+
+    if (budget > 0) {
+        percentage =
+            Math.min(
+                100,
+                (spent / budget) * 100
+            );
+    }
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+    document.getElementById("budgetSpent")
+        .textContent = money(spent);
+
+    document.getElementById("remaining")
+        .textContent = money(remaining);
+
+    document.getElementById("budgetPercent")
+        .textContent =
+        Math.round(percentage) + "%";
+
+    document.getElementById("budgetProgress")
+        .style.width =
+        percentage + "%";
+
+
+    const categories =
+        document.getElementById("categories");
+
+    if (!data.categories.length) {
+
+        categories.innerHTML =
+            "<p>No spending recorded yet.</p>";
+
+        return;
+    }
+
+
+    categories.innerHTML =
+        data.categories.map(item => `
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                padding:12px 0;
+                border-bottom:1px solid #e5e7eb;
+            ">
+
+                <strong>
+                    ${escapeHtml(item.category)}
+                </strong>
+
+                <span>
+                    ${money(item.total)}
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+
+async function loadBudget() {
+
+    const response =
+        await fetch("/api/budget");
+
+    const data =
+        await response.json();
+
+    const budget =
+        Number(data.monthly_budget || 0);
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+}
+
+
+async function saveBudget() {
+
+    const input =
+        document.getElementById("budgetInput");
+
+    const budget =
+        Number(input.value);
+
+
+    if (budget < 0 || !input.value) {
+
+        alert("Enter a valid budget.");
+
+        return;
+    }
+
+
+    const response =
+        await fetch(
+            "/api/budget",
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    monthly_budget:
+                        budget
+                })
+            }
+        );
+
+
+    if (!response.ok) {
+
+        alert("Unable to save budget.");
+
+        return;
+    }
+
+
+    input.value = "";
+
+    await loadBudget();
+    await loadStats();
+
+    alert("Monthly budget saved.");
+
+}
+
+
+loadExpenses();
+loadStats();
+
+}
+);
+
+
+function editExpense(id) {
+
+const expense =
+expenses.find(
+item => item.id === id
+);
+
+if (!expense) return;
+
+
+document.getElementById("expenseId")
+.value = expense.id;
+
+document.getElementById("amount")
+.value = expense.amount;
+
+document.getElementById("category")
+.value = expense.category;
+
+document.getElementById("description")
+.value =
+expense.description || "";
+
+document.getElementById("expenseDate")
+.value = expense.expense_date;
+
+
+document.getElementById("formTitle")
+.textContent =
+"Edit Expense";
+
+document.getElementById("cancelButton")
+.style.display =
+"block";
+
+
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+
+}
+
+
+async function deleteExpense(id) {
+
+if (!confirm(
+"Are you sure you want to delete this expense?"
+)) {
+return;
+}
+
+
+const response =
+await fetch(
+`/api/expenses/${id}`,
+{
+method: "DELETE"
+}
+);
+
+
+if (response.ok) {
+
+await 
+async function loadStats() {
+
+    const response =
+        await fetch("/api/stats");
+
+    const data =
+        await response.json();
+
+    document.getElementById("total")
+        .textContent = money(data.total);
+
+    document.getElementById("today")
+        .textContent = money(data.today);
+
+    document.getElementById("month")
+        .textContent = money(data.month);
+
+    document.getElementById("count")
+        .textContent = data.count;
+
+
+    const budgetResponse =
+        await fetch("/api/budget");
+
+    const budgetData =
+        await budgetResponse.json();
+
+    const budget =
+        Number(budgetData.monthly_budget || 0);
+
+    const spent =
+        Number(data.month || 0);
+
+    const remaining =
+        budget - spent;
+
+    let percentage = 0;
+
+    if (budget > 0) {
+        percentage =
+            Math.min(
+                100,
+                (spent / budget) * 100
+            );
+    }
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+    document.getElementById("budgetSpent")
+        .textContent = money(spent);
+
+    document.getElementById("remaining")
+        .textContent = money(remaining);
+
+    document.getElementById("budgetPercent")
+        .textContent =
+        Math.round(percentage) + "%";
+
+    document.getElementById("budgetProgress")
+        .style.width =
+        percentage + "%";
+
+
+    const categories =
+        document.getElementById("categories");
+
+    if (!data.categories.length) {
+
+        categories.innerHTML =
+            "<p>No spending recorded yet.</p>";
+
+        return;
+    }
+
+
+    categories.innerHTML =
+        data.categories.map(item => `
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                padding:12px 0;
+                border-bottom:1px solid #e5e7eb;
+            ">
+
+                <strong>
+                    ${escapeHtml(item.category)}
+                </strong>
+
+                <span>
+                    ${money(item.total)}
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+
+async function loadBudget() {
+
+    const response =
+        await fetch("/api/budget");
+
+    const data =
+        await response.json();
+
+    const budget =
+        Number(data.monthly_budget || 0);
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+}
+
+
+async function saveBudget() {
+
+    const input =
+        document.getElementById("budgetInput");
+
+    const budget =
+        Number(input.value);
+
+
+    if (budget < 0 || !input.value) {
+
+        alert("Enter a valid budget.");
+
+        return;
+    }
+
+
+    const response =
+        await fetch(
+            "/api/budget",
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    monthly_budget:
+                        budget
+                })
+            }
+        );
+
+
+    if (!response.ok) {
+
+        alert("Unable to save budget.");
+
+        return;
+    }
+
+
+    input.value = "";
+
+    await loadBudget();
+    await loadStats();
+
+    alert("Monthly budget saved.");
+
+}
+
+
+loadExpenses();
+loadStats();
+
+}
+
+}
+
+
+document.getElementById("cancelButton")
+.onclick =
+resetForm;
+
+
+function resetForm() {
+
+form.reset();
+
+document.getElementById("expenseId")
+.value = "";
+
+document.getElementById("formTitle")
+.textContent =
+"Add Expense";
+
+document.getElementById("cancelButton")
+.style.display =
+"none";
+
+document.getElementById("expenseDate")
+.value =
+new Date()
+.toISOString()
+.split("T")[0];
+
+}
+
+
+document.getElementById("search")
+.addEventListener(
+"input",
+renderExpenses
+);
+
+
+function escapeHtml(value) {
+
+return String(value)
+.replaceAll("&", "&amp;")
+.replaceAll("<", "&lt;")
+.replaceAll(">", "&gt;")
+.replaceAll('"', "&quot;")
+.replaceAll("'", "&#039;");
+
+}
+
+
+
+async function loadStats() {
+
+    const response =
+        await fetch("/api/stats");
+
+    const data =
+        await response.json();
+
+    document.getElementById("total")
+        .textContent = money(data.total);
+
+    document.getElementById("today")
+        .textContent = money(data.today);
+
+    document.getElementById("month")
+        .textContent = money(data.month);
+
+    document.getElementById("count")
+        .textContent = data.count;
+
+
+    const budgetResponse =
+        await fetch("/api/budget");
+
+    const budgetData =
+        await budgetResponse.json();
+
+    const budget =
+        Number(budgetData.monthly_budget || 0);
+
+    const spent =
+        Number(data.month || 0);
+
+    const remaining =
+        budget - spent;
+
+    let percentage = 0;
+
+    if (budget > 0) {
+        percentage =
+            Math.min(
+                100,
+                (spent / budget) * 100
+            );
+    }
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+    document.getElementById("budgetSpent")
+        .textContent = money(spent);
+
+    document.getElementById("remaining")
+        .textContent = money(remaining);
+
+    document.getElementById("budgetPercent")
+        .textContent =
+        Math.round(percentage) + "%";
+
+    document.getElementById("budgetProgress")
+        .style.width =
+        percentage + "%";
+
+
+    const categories =
+        document.getElementById("categories");
+
+    if (!data.categories.length) {
+
+        categories.innerHTML =
+            "<p>No spending recorded yet.</p>";
+
+        return;
+    }
+
+
+    categories.innerHTML =
+        data.categories.map(item => `
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                padding:12px 0;
+                border-bottom:1px solid #e5e7eb;
+            ">
+
+                <strong>
+                    ${escapeHtml(item.category)}
+                </strong>
+
+                <span>
+                    ${money(item.total)}
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+
+async function loadBudget() {
+
+    const response =
+        await fetch("/api/budget");
+
+    const data =
+        await response.json();
+
+    const budget =
+        Number(data.monthly_budget || 0);
+
+    document.getElementById("budget")
+        .textContent = money(budget);
+
+}
+
+
+async function saveBudget() {
+
+    const input =
+        document.getElementById("budgetInput");
+
+    const budget =
+        Number(input.value);
+
+
+    if (budget < 0 || !input.value) {
+
+        alert("Enter a valid budget.");
+
+        return;
+    }
+
+
+    const response =
+        await fetch(
+            "/api/budget",
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    monthly_budget:
+                        budget
+                })
+            }
+        );
+
+
+    if (!response.ok) {
+
+        alert("Unable to save budget.");
+
+        return;
+    }
+
+
+    input.value = "";
+
+    await loadBudget();
+    await loadStats();
+
+    alert("Monthly budget saved.");
+
+}
+
+
+loadExpenses();
+loadStats();
+
+</script>
+
+</body>
+
+</html>
