@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- HEADER -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chisomo's Expense Tracker"
+            android:textColor="#111827"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage your spending"
+            android:textColor="#6B7280"
+            android:textSize="15sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- TOTAL SPENDING CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="#FFFFFF"
+            android:elevation="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOTAL SPENDING"
+                android:textColor="#6B7280"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/totalSpending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MK 0.00"
+                android:textColor="#111827"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginTop="6dp" />
+
+        </LinearLayout>
+
+        <!-- BUDGET SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Budget"
+            android:textColor="#111827"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:background="#FFFFFF"
+            android:elevation="2dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/budgetText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Monthly Budget: Not set"
+                android:textColor="#374151"
+                android:textSize="16sp"
+                android:lineSpacingExtra="5dp" />
+
+            <EditText
+                android:id="@+id/budgetAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter monthly budget (MK)"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:layout_marginTop="12dp" />
+
+            <Button
+                android:id="@+id/saveBudgetButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SAVE BUDGET"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp" />
+
+        </LinearLayout>
+
+        <!-- ADD EXPENSE -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Expense"
+            android:textColor="#111827"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:background="#FFFFFF"
+            android:elevation="2dp"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/expenseName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Expense name"
+                android:inputType="text"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/expenseAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Amount (MK)"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/expenseCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category"
+                android:inputType="text"
+                android:singleLine="true"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/saveExpenseButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SAVE EXPENSE"
+                android:textStyle="bold"
+                android:layout_marginTop="14dp" />
+
+        </LinearLayout>
+
+        <!-- EXPENSES -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Expenses"
+            android:textColor="#111827"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:layout_marginTop="26dp" />
+
+        <LinearLayout
+            android:id="@+id/expenseContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp" />
+
+    </LinearLayout>
+
+</ScrollView>
